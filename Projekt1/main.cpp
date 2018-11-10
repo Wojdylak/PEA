@@ -117,9 +117,8 @@ void MyMenu()
                     cout << tspPath[tspPath.size()-1] << endl;
                     
                     for (int i = 0; i < tspPath.size() - 1; i++) {
-
-                    if (i != 0) std::cout << " - ";
-                    std::cout << tspPath[i];
+                        if (i != 0) cout << " - ";
+                        cout << tspPath[i];
                     }
                     delete tspBranchAndBound;
                 }
@@ -133,13 +132,13 @@ void MyMenu()
                 {
                     tspBranchAndBound = new BranchAndBound();
                     tspPath = tspBranchAndBound->findPathTwo(matrix);
-                    
+                
                     cout << tspPath[tspPath.size()-1] << endl;
                     
                     for (int i = 0; i < tspPath.size() - 1; i++) {
-                        if (i != 0) std::cout << " - ";
-                        std::cout << tspPath[i];
-                        }
+                        if (i != 0) cout << " - ";
+                        cout << tspPath[i];
+                    }
                     delete tspBranchAndBound;
                 }
                 else

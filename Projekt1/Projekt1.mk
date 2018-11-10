@@ -2,12 +2,12 @@
 ## Auto Generated makefile by CodeLite IDE
 ## any manual changes will be erased      
 ##
-## Debug
+## Release
 ProjectName            :=Projekt1
-ConfigurationName      :=Debug
+ConfigurationName      :=Release
 WorkspacePath          :=C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty
 ProjectPath            :=C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1
-IntermediateDirectory  :=./Debug
+IntermediateDirectory  :=./Release
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
@@ -28,7 +28,7 @@ LibraryPathSwitch      :=-L
 PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
 OutputFile             :=$(IntermediateDirectory)/$(ProjectName)
-Preprocessors          :=
+Preprocessors          :=$(PreprocessorSwitch)NDEBUG 
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
 PreprocessOnlySwitch   :=-E
@@ -52,8 +52,8 @@ LibPath                := $(LibraryPathSwitch).
 AR       := D:/Programy/TDM-GCC/bin/ar.exe rcu
 CXX      := D:/Programy/TDM-GCC/bin/g++.exe
 CC       := D:/Programy/TDM-GCC/bin/gcc.exe
-CXXFLAGS :=  -g -O0 -std=c++11 -Wall $(Preprocessors)
-CFLAGS   :=  -g -O0 -std=c++11 -Wall $(Preprocessors)
+CXXFLAGS :=  -O2 -std=c++11 -Wall $(Preprocessors)
+CFLAGS   :=  -O2 -std=c++11 -Wall $(Preprocessors)
 ASFLAGS  := 
 AS       := D:/Programy/TDM-GCC/bin/as.exe
 
@@ -81,11 +81,11 @@ $(OutputFile): $(IntermediateDirectory)/.d $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) @$(ObjectsFileList) $(LibPath) $(Libs) $(LinkOptions)
 
 MakeIntermediateDirs:
-	@$(MakeDirCommand) "./Debug"
+	@$(MakeDirCommand) "./Release"
 
 
 $(IntermediateDirectory)/.d:
-	@$(MakeDirCommand) "./Debug"
+	@$(MakeDirCommand) "./Release"
 
 PreBuild:
 
@@ -147,6 +147,6 @@ $(IntermediateDirectory)/DynamicBitmask.cpp$(PreprocessSuffix): DynamicBitmask.c
 ## Clean
 ##
 clean:
-	$(RM) -r ./Debug/
+	$(RM) -r ./Release/
 
 

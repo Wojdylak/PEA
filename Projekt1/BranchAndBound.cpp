@@ -171,7 +171,6 @@ std::vector<int> BranchAndBound::findPath(matrixCost * matrix)
 
 std::vector<int> BranchAndBound::findPathTwo(matrixCost * matrix)
 {
-//    std::cout<<1<<std::endl;
     this->numberVertices = matrix->getNumberVertices();
     this->martixOrginalCost = matrix->clone();
     int bestValue = INT_MAX;
@@ -179,8 +178,6 @@ std::vector<int> BranchAndBound::findPathTwo(matrixCost * matrix)
     std::vector<int> resultPath;
     this->checkedNode = new Node();
     
-    
-//    std::cout<<2<<std::endl;
     
     tmpPath.push_back(0);
     this->checkedNode->level = 1; 
@@ -193,11 +190,6 @@ std::vector<int> BranchAndBound::findPathTwo(matrixCost * matrix)
     {
         this->checkedNode = this->queue.top();
         this->queue.pop();
-     
-        if (bestValue != INT_MAX)
-            std::cout<<bestValue<<std::endl;
-        
-        std::cout<<std::endl;
      
         if (this->checkedNode->bound < bestValue)
         {

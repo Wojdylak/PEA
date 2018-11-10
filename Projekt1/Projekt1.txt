@@ -1,1 +1,1 @@
-./Debug/matrixCost.cpp.o ./Debug/BruteForce.cpp.o ./Debug/BranchAndBound.cpp.o ./Debug/main.cpp.o ./Debug/Node.cpp.o ./Debug/DynamicBitmask.cpp.o   
+./Release/matrixCost.cpp.o ./Release/BruteForce.cpp.o ./Release/BranchAndBound.cpp.o ./Release/main.cpp.o ./Release/Node.cpp.o ./Release/DynamicBitmask.cpp.o   
