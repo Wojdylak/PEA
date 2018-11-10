@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Admin
-Date                   :=09/11/2018
+Date                   :=10/11/2018
 CodeLitePath           :=D:/Programy/CodeLite
 LinkerName             :=D:/Programy/TDM-GCC/bin/g++.exe
 SharedObjectLinkerName :=D:/Programy/TDM-GCC/bin/g++.exe -shared -fPIC
@@ -62,7 +62,7 @@ AS       := D:/Programy/TDM-GCC/bin/as.exe
 ## User defined environment variables
 ##
 CodeLiteDir:=D:\Programy\CodeLite
-Objects0=$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IntermediateDirectory)/BruteForce.cpp$(ObjectSuffix) $(IntermediateDirectory)/BranchAndBound.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Node.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IntermediateDirectory)/BruteForce.cpp$(ObjectSuffix) $(IntermediateDirectory)/BranchAndBound.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Node.cpp$(ObjectSuffix) $(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) 
 
 
 
@@ -132,6 +132,14 @@ $(IntermediateDirectory)/Node.cpp$(DependSuffix): Node.cpp
 
 $(IntermediateDirectory)/Node.cpp$(PreprocessSuffix): Node.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Node.cpp$(PreprocessSuffix) Node.cpp
+
+$(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix): DynamicBitmask.cpp $(IntermediateDirectory)/DynamicBitmask.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1/DynamicBitmask.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/DynamicBitmask.cpp$(DependSuffix): DynamicBitmask.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/DynamicBitmask.cpp$(DependSuffix) -MM DynamicBitmask.cpp
+
+$(IntermediateDirectory)/DynamicBitmask.cpp$(PreprocessSuffix): DynamicBitmask.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/DynamicBitmask.cpp$(PreprocessSuffix) DynamicBitmask.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

@@ -11,6 +11,7 @@
 #include "matrixCost.h"
 #include "BruteForce.h"
 #include "branchAndBound.h"
+#include "DynamicBitmask.h"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ int main()
     tspBranchAndBound = new BranchAndBound();
 
     
-    obj->loadFile("dod2.txt");
+    obj->loadFile("tsp_17.txt");
 
 //    obj2 = obj->clone();
 //    obj->generateRandom(5);
@@ -79,10 +80,14 @@ int main()
 	}
 */
 
-
+//    DynamicBitmask * karol;
+//    karol = new DynamicBitmask;
+//
+//    cout<<karol->findPath(obj)<<endl;
+//
+//    delete karol;
 
 //    MyMenu();
-
 
 //    delete wsk;
     delete obj;

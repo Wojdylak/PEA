@@ -42,7 +42,6 @@ matrixCost::~matrixCost()
     delete [] this->arrayVertices;
 }
 
-
 void matrixCost::init(int number)
 {
     this->numberVertices = number;

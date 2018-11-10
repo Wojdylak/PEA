@@ -8,6 +8,8 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
+    <File Name="DynamicBitmask.cpp"/>
+    <File Name="DynamicBitmask.h"/>
     <File Name="BruteForce.h"/>
     <File Name="BruteForce.cpp"/>
     <File Name="MyFunctions.h"/>

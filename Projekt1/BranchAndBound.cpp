@@ -8,7 +8,8 @@ BranchAndBound::BranchAndBound()
 
 BranchAndBound::~BranchAndBound()
 {
-    delete this->martixOrginalCost;
+    if (this->martixOrginalCost)
+        delete this->martixOrginalCost;
 }
 
 //sprawdzanie czy byliśmy juz w danym wierzcholku
@@ -94,6 +95,7 @@ void BranchAndBound::setBoundTwo(Node &n)
     }
     
     delete this->matrixCopyCost;
+    this->matrixCopyCost = nullptr;
     n.bound = tmp;
 }
 
@@ -156,6 +158,9 @@ std::vector<int> BranchAndBound::findPath(matrixCost * matrix)
     
     resultPath.push_back(bestValue);
     
+    delete this->martixOrginalCost;
+    this->martixOrginalCost = nullptr;
+    
     return resultPath;
     
 }
@@ -216,5 +221,9 @@ std::vector<int> BranchAndBound::findPathTwo(matrixCost * matrix)
     
     resultPath.push_back(bestValue);
     
+    delete this->martixOrginalCost;
+    this->martixOrginalCost = nullptr;
+    
     return resultPath;
 }
+//
