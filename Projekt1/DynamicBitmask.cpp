@@ -25,19 +25,6 @@ int DynamicBitmask::findPath(matrixCost *matrix)
     
     result = dynamicBitMask(0,1);
     
-    for (int i=0; i<this->numberVertices;i++)
-    {
-        for (int j=0; j<31;j++)
-        {
-            if ( (*state)[i][j] == INT_MAX)
-                std::cout<<"-- ";
-            else
-                std::cout<<(*state)[i][j]<<" ";
-        }
-        std::cout<<std::endl;
-    }
-    
-    
     delete state;
     return result;
 }

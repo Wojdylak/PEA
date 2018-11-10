@@ -8,19 +8,18 @@ class Node
 public:
     int level;
     int bound;
-    int value;
     
     std::vector <int> path;
     
     Node();
-    Node(int b, int v, int l);
+    Node(int b, int l);
     ~Node();
 };
 
 struct comp{
-    bool operator()(const Node& a, const Node& b) const
+    bool operator()(const Node* a, const Node* b) const
     {
-        return a.bound > b.bound;
+        return a->bound > b->bound;
     }
 };
 

@@ -6,7 +6,6 @@
 #include <iomanip>
 #include <vector>
 
-
 #include "MyFunctions.h"
 #include "matrixCost.h"
 #include "BruteForce.h"
@@ -21,81 +20,7 @@ int main()
 {
     srand(time(NULL));
     
-//    int * path, *wsk;
-    matrixCost * obj, * obj2;
-//    BruteForce * tsp;
-    BranchAndBound * tspBranchAndBound;
-    vector<int> tspPath;
-    
-    obj = new matrixCost();
-//    tsp = new tspBruteForce();
-    tspBranchAndBound = new BranchAndBound();
-
-    
-    obj->loadFile("tsp_17.txt");
-
-//    obj2 = obj->clone();
-//    obj->generateRandom(5);
-    
-    obj->show();
-//    tspBranchAndBound->findPathTwo(obj);
-    
-    
-    tspPath = tspBranchAndBound->findPathTwo(obj);
-    
-    cout << tspPath[tspPath.size()-1] << endl;
-    for (int i = 0; i < tspPath.size() - 1; i++) 
-    {
-        if (i != 0) cout << " - ";
-        cout << tspPath[i];
-    }
-/*
-    double avg;
-
-    std::fstream input("BB1_3.txt", std::ios::out);
-	if (input.good())
-	{
-        
-        for (int i=2; i<25;i+=2)
-        {
-            avg =0.0;
-            for (int j=0; j<100; j++)
-            {
-                cout<<i<<" "<<j<<endl;
-                obj = new matrixCost();
-                tspBranchAndBound = new BranchAndBound();
-                obj->generateRandom(i);
-                chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
-                tspBranchAndBound->findPathTwo(obj);
-                chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
-                avg += chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-                delete tspBranchAndBound;
-                delete obj;
-            }
-            avg /= 100;
-            input<<i<<" "<<setprecision(20)<<avg<<endl;
-        }
-        
-		input.close();
-	}
-*/
-
-//    DynamicBitmask * karol;
-//    karol = new DynamicBitmask;
-//
-//    cout<<karol->findPath(obj)<<endl;
-//
-//    delete karol;
-
-//    MyMenu();
-
-//    delete wsk;
-    delete obj;
-//    delete obj2;
-//    delete tsp;
-    delete tspBranchAndBound;
-
-
+    MyMenu();
 
 	return 0;
 }
@@ -105,6 +30,7 @@ void MyMenu()
     matrixCost * matrix = nullptr;
     BruteForce * tspBruteForce = nullptr;
     BranchAndBound * tspBranchAndBound = nullptr;
+    DynamicBitmask * tspDynamicBitmask = nullptr;
     vector<int> tspPath;
     int * tspPathStack = nullptr;
     int inNumber;
@@ -224,7 +150,11 @@ void MyMenu()
             {
                 if (matrix->isGood())
                 {
-                    ;
+                    tspDynamicBitmask = new DynamicBitmask();
+                    
+                    cout<<tspDynamicBitmask->findPath(matrix);
+                    
+                    delete tspDynamicBitmask;
                 }
                 else
                     cout<<"Nie ma macierzy "<<endl;
