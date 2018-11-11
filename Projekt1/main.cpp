@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <vector>
 
+
 #include "MyFunctions.h"
 #include "matrixCost.h"
 #include "BruteForce.h"
@@ -22,6 +23,7 @@ int main()
     
     MyMenu();
 
+
 	return 0;
 }
 
@@ -30,7 +32,6 @@ void MyMenu()
     matrixCost * matrix = nullptr;
     BruteForce * tspBruteForce = nullptr;
     BranchAndBound * tspBranchAndBound = nullptr;
-    DynamicBitmask * tspDynamicBitmask = nullptr;
     vector<int> tspPath;
     int * tspPathStack = nullptr;
     int inNumber;
@@ -117,8 +118,9 @@ void MyMenu()
                     cout << tspPath[tspPath.size()-1] << endl;
                     
                     for (int i = 0; i < tspPath.size() - 1; i++) {
-                        if (i != 0) cout << " - ";
-                        cout << tspPath[i];
+
+                    if (i != 0) std::cout << " - ";
+                    std::cout << tspPath[i];
                     }
                     delete tspBranchAndBound;
                 }
@@ -132,13 +134,13 @@ void MyMenu()
                 {
                     tspBranchAndBound = new BranchAndBound();
                     tspPath = tspBranchAndBound->findPathTwo(matrix);
-                
+                    
                     cout << tspPath[tspPath.size()-1] << endl;
                     
                     for (int i = 0; i < tspPath.size() - 1; i++) {
-                        if (i != 0) cout << " - ";
-                        cout << tspPath[i];
-                    }
+                        if (i != 0) std::cout << " - ";
+                        std::cout << tspPath[i];
+                        }
                     delete tspBranchAndBound;
                 }
                 else
@@ -149,11 +151,7 @@ void MyMenu()
             {
                 if (matrix->isGood())
                 {
-                    tspDynamicBitmask = new DynamicBitmask();
-                    
-                    cout<<tspDynamicBitmask->findPath(matrix);
-                    
-                    delete tspDynamicBitmask;
+                    ;
                 }
                 else
                     cout<<"Nie ma macierzy "<<endl;
