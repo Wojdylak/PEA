@@ -12,7 +12,7 @@ BranchAndBound::~BranchAndBound()
         delete this->martixOrginalCost;
 }
 
-//sprawdzanie czy byliśmy juz w danym wierzcholku
+//sprawdzanie czy wchodzilismy juz do tego wierzcholka
 bool BranchAndBound::checkRows(Node *n, int j)
 {
     for (int i = 0; i < n->path.size() - 1; i++){
@@ -24,7 +24,7 @@ bool BranchAndBound::checkRows(Node *n, int j)
     return false;
 }
 
-//sprawdzanie czy bylismy juz w danym wierzcholku
+//sprawdzanie czy wychodzilismy z tego wierzcholka
 bool BranchAndBound::checkColumns(Node *n, int j)
 {
     for (int i = 1; i < n->path.size(); i++){
@@ -98,6 +98,7 @@ void BranchAndBound::setBoundTwo(Node *n)
     this->matrixCopyCost = nullptr;
     n->bound = tmp;
 }
+
 
 std::vector<int> BranchAndBound::findPath(matrixCost * matrix)
 {

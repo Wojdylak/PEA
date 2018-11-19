@@ -1,6 +1,15 @@
 #ifndef MATRIXCOST_H
 #define MATRIXCOST_H
 
+#include <sstream>
+#include <fstream>
+#include <stdlib.h>
+#include <iterator>
+#include <iostream>
+#include <iomanip>
+
+
+
 class matrixCost
 {
     int numberVertices;
@@ -8,6 +17,7 @@ class matrixCost
     bool flagGood;
     
     void init(int number);
+    bool fileReadLine(std::ifstream &input, int size, int numberRow);
     void setInfinity();
     void setZero();
     
@@ -18,8 +28,8 @@ public:
     matrixCost(const matrixCost& obj);
     ~matrixCost();
     
-    int getNumberVertices();
-    int getCost(int i, int j);
+    int getNumberVertices() const;
+    int getCost(int i, int j) const;
     int reduceCostRows();
     int reduceCostColumns();
     void reduceMatrix(int row, int column);

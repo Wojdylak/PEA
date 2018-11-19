@@ -1,11 +1,3 @@
-#include <fstream>
-#include <stdlib.h>
-
-#include <iterator>
-
-#include <iostream>
-#include <iomanip>
-
 #include "matrixCost.h"
 
 matrixCost::matrixCost()
@@ -70,12 +62,12 @@ void matrixCost::setZero()
 }
 
 
-int matrixCost::getNumberVertices()
+int matrixCost::getNumberVertices() const
 {
     return this->numberVertices;
 }
 
-int matrixCost::getCost(int i, int j)
+int matrixCost::getCost(int i, int j) const
 {
     return this->arrayVertices[i][j];
 }
@@ -143,44 +135,62 @@ void matrixCost::reduceMatrix(int row, int column)
     this->arrayVertices[column][row] = -1;
 }
 
+bool matrixCost::fileReadLine(std::ifstream &input, int size, int numberRow)
+{
+    std::string s;
+    std::getline(input, s);
+    
+    if(input.fail() || s.empty())
+        return false;
+        
+    std::istringstream in_ss(s);
+    
+    for (int i = 0; i < size; i++)
+    {
+        in_ss >> arrayVertices[numberRow][i];
+        if(in_ss.fail())
+            return (false);
+    }
+    
+    return true;
+}
+
 bool matrixCost::loadFile(char* path)
 {
-    bool flag = true;
-    std::fstream input(path, std::ios::in);
+    int number;
+    this->flagGood = false;
+    std::ifstream input(path, std::ios::in);
+    
 	if (input.good())
 	{
-		int number,j;
         input >> number;
+        // po wczytaniu wyczysc linie
+        input.ignore(INT_MAX, '\n');
+
         if(input.fail())
-            flag = false;
+        {
+            input.close();
+            return false;
+        }
+        // usuwa i tworzy nowa macierz
         this->~matrixCost();
         this->init(number);
-        j =0;
-		while (!input.eof() && flag)
+        for (int i=0; i<number; i++)
         {
-            for(int i = 0; i < this->numberVertices; i++)
+            // jesli wczytalo zle to koniec 
+            if (!fileReadLine(input, number, i))
             {
-                input >> this->arrayVertices[j][i];
-                if (input.fail())
-                {
-                    flag = false;
-                    break;
-                }
-                
+                input.close();
+                return false;
             }
-            j++;
-		}
-		input.close();
-        if (flag)
-        {
-            this->setInfinity();
-            this->flagGood = true;
-            return true;
         }
+		input.close();
+        this->setInfinity();
+        this->flagGood = true;
+        return true;
 	}
-    this->flagGood = false;
-    return false;
     
+    return false;
 }
 
 void matrixCost::generateRandom(int number)
@@ -200,6 +210,7 @@ void matrixCost::generateRandom(int number)
     }
     this->flagGood = true;
 }
+
 
 void matrixCost::show()
 {

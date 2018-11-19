@@ -15,5 +15,6 @@ Node::Node(int b, int l)
 
 Node::~Node()
 {
+    this->path.clear();
 }
 

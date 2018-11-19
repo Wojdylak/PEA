@@ -24,7 +24,18 @@ public:
     void setBound(Node *n);
     void setBoundTwo(Node *n);
     
+    /**
+     * @brief znajduje najkrotrsza sciezke 
+     * @param matrix Wskaznik na obiekt klasy MatrixCost ktora przechowuje graf
+     * @return zwraca wektor z sciezka
+     */
     std::vector<int> findPath(matrixCost * matrix);
+    
+    /**
+     * @brief znajduje najkrotsza sciezke (algorytm Little)
+     * @param matrix Wskaznik na obiekt klasy MatrixCost ktora przechowuje graf
+     * @return zwraca wektor z sciezka
+     */
     std::vector<int> findPathTwo(matrixCost * matrix);
 
 

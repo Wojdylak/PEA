@@ -9,7 +9,7 @@ public:
     int level;
     int bound;
     
-    std::vector <int> path;
+    std::vector<int> path;
     
     Node();
     Node(int b, int l);

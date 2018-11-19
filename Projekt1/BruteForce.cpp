@@ -1,12 +1,10 @@
-#include <iterator>
-
 #include "BruteForce.h"
 
-BruteForce::BruteForce()
+BruteForce::BruteForce(const matrixCost &originalMatrix)  : matrix(originalMatrix)
 {
-    this->stackMinPath = nullptr;
-    this->stackTmpPath = nullptr;
-    this->visited = nullptr;
+    numberVertices = matrix.getNumberVertices();
+    stackMinPath = new int[numberVertices];
+    stackTmpPath = new int[numberVertices]; 
 }
 
 BruteForce::~BruteForce()
@@ -15,58 +13,56 @@ BruteForce::~BruteForce()
         delete [] this->stackMinPath;
     if (this->stackTmpPath)
         delete [] this->stackTmpPath;
-    if (this->visited)
-        delete [] this->visited;
+}
+
+int BruteForce::calculatePathCost()
+{
+    int result=0;
+    for (int i=0; i<numberVertices - 1; i++)
+    {
+        result += matrix.getCost(stackTmpPath[i], stackTmpPath[i+1]);
+    }
+    result += matrix.getCost(stackTmpPath[numberVertices-1], 0);
+    return result;
 }
 
 void BruteForce::bruteForce(int vertex)
 {
-    int tmp;
-    this->stackTmpPath[this->counterVertices++] = vertex;
-    this->visited[vertex] = true;
-    
-    if (this->counterVertices < this->numberVertices)
+    if (vertex < numberVertices - 1)
     {
-        for (int i=1; i<this->numberVertices; i++)
+        for (int i = vertex; i<numberVertices; i++)
         {
-            if ((i != vertex) && !this->visited[i]) 
-            {
-                tmp = this->martixCost->getCost(vertex, i);
-                this->weightTmpPath += tmp;
-                this->bruteForce(i);
-                this->weightTmpPath -= tmp;
-            }
+            swap(stackTmpPath[vertex], stackTmpPath[i]);
+            bruteForce(vertex+1);
+            swap(stackTmpPath[vertex], stackTmpPath[i]);
         }
     }
-    else
+    else 
     {
-        tmp = this->martixCost->getCost(vertex, 0);
-        this->weightTmpPath += tmp;
-        if (this->weightTmpPath < this->weightMinPath)
+        weightTmpPath = calculatePathCost();
+        if (weightTmpPath < weightMinPath)
         {
-            this->weightMinPath = this->weightTmpPath;
-            std::copy(this->stackTmpPath, this->stackTmpPath + this->numberVertices, this->stackMinPath);
+            weightMinPath = weightTmpPath;
+            std::copy(stackTmpPath, stackTmpPath + numberVertices, stackMinPath);
         }
-        this->weightTmpPath -= tmp;
     }
-    this->counterVertices--;
-    this->visited[vertex] = false;
 }
 
-int * BruteForce::findPath(matrixCost * mCost)
+
+// zwraca wskaznik na tablice
+// pierwszy element waga sciezki 
+// drugi ilosc elementow sciezki, i nastepne to sciezka
+int * BruteForce::findPath()
 {
-    this->martixCost = mCost;
-    
-    this->numberVertices = this->martixCost->getNumberVertices();
-    this->weightMinPath = INT_MAX;
-    this->weightTmpPath = 0;
-    this->counterVertices = 0;
-    this->stackMinPath = new int[this->numberVertices];
-    this->stackTmpPath = new int[this->numberVertices]; 
-    this->visited = new bool[this->numberVertices] {false};
+    for (int i=0; i < numberVertices; i++)
+    {
+        stackMinPath[i] = i;
+        stackTmpPath[i] = i; 
+    }
     int *result = new int[this->numberVertices + 3];
     
-    this->bruteForce(0);
+    weightMinPath = calculatePathCost();
+    bruteForce(1);
     
     result[0] = this->weightMinPath;
     result[1] = this->numberVertices + 1;
@@ -75,4 +71,6 @@ int * BruteForce::findPath(matrixCost * mCost)
 
     return result;
 }
+
+
 

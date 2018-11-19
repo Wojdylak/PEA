@@ -1,7 +1,7 @@
 
 const std::string INTRO = 
 "PEA projekt \n"
-"***\n"
+"Karol Wojdyla 235932\n"
 "2018\n";
 
 const std::string MAIN_MENU =

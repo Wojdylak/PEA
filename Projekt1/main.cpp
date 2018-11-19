@@ -20,18 +20,103 @@ void MyMenu();
 int main()
 {
     srand(time(NULL));
+
+
+    matrixCost *obj;
+    obj = new matrixCost();
+    obj->generateRandom(12);
+//    if (obj->loadFile("test.txt"))
+//        obj->show();
+        
+        
+    int * tspPathStack = nullptr;
     
-    MyMenu();
+    BruteForce tspBruteForce(*obj);
+    
+    
+    double avg=0.0;
+    chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
+    tspBruteForce.findPath();
+    chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
+    avg = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+    cout<<setprecision(20)<<avg<<endl;
+    
+        
+        
+//    BruteForce tsp(13);
+//    double avg=0.0;
+//    chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
+    
+//    chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
+//    avg = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+//    cout<<setprecision(20)<<avg<<endl;
 
+/*
+    double avg;
+    std::fstream input("BB1_3.txt", std::ios::out);
+	if (input.good())
+	{
+        
+        for (int i=2; i<25;i+=2)
+        {
+            avg =0.0;
+            for (int j=0; j<100; j++)
+            {
+                cout<<i<<" "<<j<<endl;
+                obj = new matrixCost();
+                tspBranchAndBound = new BranchAndBound();
+                obj->generateRandom(i);
+                chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
+                tspBranchAndBound->findPathTwo(obj);
+                chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
+                avg += chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+                delete tspBranchAndBound;
+                delete obj;
+            }
+            avg /= 100;
+            input<<i<<" "<<setprecision(20)<<avg<<endl;
+        }
+        
+		input.close();
+	}
+*/
+    
+/*
+    double avg;
+    for (int i=13; i<14;i+=2)
+    {
+        avg =0.0;
+        for (int j=0; j<10; j++)
+        {
+            cout<<i<<" "<<j<<endl;
+//            obj = new matrixCost();
+//            obj->generateRandom(i);
+            BruteForce tsp(13);
+            chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
+            tsp.test(0);
+            chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
+            avg += chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+//            delete obj;
+        }
+        avg /= 10;
+        cout<<i<<" "<<setprecision(20)<<avg<<endl;
+    }
 
+*/
+    delete obj;
+
+//    MyMenu();
+    
 	return 0;
 }
 
+/*
 void MyMenu()
 {
     matrixCost * matrix = nullptr;
     BruteForce * tspBruteForce = nullptr;
     BranchAndBound * tspBranchAndBound = nullptr;
+    DynamicBitmask * tspDynamicBitmask = nullptr;
     vector<int> tspPath;
     int * tspPathStack = nullptr;
     int inNumber;
@@ -151,7 +236,16 @@ void MyMenu()
             {
                 if (matrix->isGood())
                 {
-                    ;
+                    tspDynamicBitmask = new DynamicBitmask();
+                    tspPath = tspDynamicBitmask->findPath(matrix);
+                    
+                    cout << tspPath[tspPath.size()-1] << endl;
+                    
+                    for (int i = 0; i < tspPath.size() - 1; i++) {
+                        if (i != 0) std::cout << " - ";
+                        std::cout << tspPath[i];
+                        }
+                    delete tspDynamicBitmask;
                 }
                 else
                     cout<<"Nie ma macierzy "<<endl;
@@ -170,6 +264,6 @@ void MyMenu()
         cin.ignore(INT_MAX, '\n');
     } // end loop1
 }
-
+*/
 
 
