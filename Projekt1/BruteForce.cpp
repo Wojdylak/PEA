@@ -9,10 +9,8 @@ BruteForce::BruteForce(const matrixCost &originalMatrix)  : matrix(originalMatri
 
 BruteForce::~BruteForce()
 {
-    if (this->stackMinPath) 
-        delete [] this->stackMinPath;
-    if (this->stackTmpPath)
-        delete [] this->stackTmpPath;
+    delete [] stackTmpPath;
+    delete [] stackMinPath;
 }
 
 int BruteForce::calculatePathCost()
@@ -49,27 +47,19 @@ void BruteForce::bruteForce(int vertex)
 }
 
 
-// zwraca wskaznik na tablice
-// pierwszy element waga sciezki 
-// drugi ilosc elementow sciezki, i nastepne to sciezka
-int * BruteForce::findPath()
+const Path BruteForce::findPath()
 {
     for (int i=0; i < numberVertices; i++)
     {
         stackMinPath[i] = i;
         stackTmpPath[i] = i; 
     }
-    int *result = new int[this->numberVertices + 3];
     
     weightMinPath = calculatePathCost();
     bruteForce(1);
     
-    result[0] = this->weightMinPath;
-    result[1] = this->numberVertices + 1;
-    std::copy(this->stackMinPath, this->stackMinPath + this->numberVertices, &result[2]);
-    result[this->numberVertices + 2] = 0;
-
-    return result;
+    return {weightMinPath, stackMinPath};
+    // maybe move(stackMinPath)
 }
 
 

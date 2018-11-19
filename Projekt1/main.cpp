@@ -17,39 +17,35 @@ using namespace std;
 
 void MyMenu();
 
+
 int main()
 {
     srand(time(NULL));
 
+    Path path;
 
     matrixCost *obj;
     obj = new matrixCost();
-    obj->generateRandom(12);
-//    if (obj->loadFile("test.txt"))
-//        obj->show();
+//    obj->generateRandom(13);
+    if (obj->loadFile("tsp_13.txt"))
+        obj->show();
         
-        
-    int * tspPathStack = nullptr;
-    
     BruteForce tspBruteForce(*obj);
     
+//    path = tspBruteForce.findPath();
     
     double avg=0.0;
     chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
-    tspBruteForce.findPath();
+    path = tspBruteForce.findPath();
     chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
     avg = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
     cout<<setprecision(20)<<avg<<endl;
     
-        
-        
-//    BruteForce tsp(13);
-//    double avg=0.0;
-//    chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
+    cout<<path.cost<<endl;
+    for (int i=0; i<obj->getNumberVertices(); i++)
+        cout << path.path[i] << " - ";
+    cout<<"0"<<endl;
     
-//    chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
-//    avg = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-//    cout<<setprecision(20)<<avg<<endl;
 
 /*
     double avg;
