@@ -6,7 +6,6 @@
 #include <iomanip>
 #include <vector>
 
-
 #include "MyFunctions.h"
 #include "matrixCost.h"
 #include "BruteForce.h"
@@ -22,30 +21,22 @@ int main()
 {
     srand(time(NULL));
 
-    Path path;
-
     matrixCost *obj;
     obj = new matrixCost();
-//    obj->generateRandom(13);
-    if (obj->loadFile("tsp_13.txt"))
-        obj->show();
-        
-    BruteForce tspBruteForce(*obj);
+//    obj->generateRandom(19);
+//    if (obj->loadFile("tsp_17.txt"))
+//        obj->show();
+
     
-//    path = tspBruteForce.findPath();
+//    double avg=0.0;
+//    chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
+//    tspPath = tspDynamicBitmask.findPath();
+//    chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
+//    avg = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+//    cout<<setprecision(20)<<avg<<endl;
     
-    double avg=0.0;
-    chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
-    path = tspBruteForce.findPath();
-    chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
-    avg = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-    cout<<setprecision(20)<<avg<<endl;
-    
-    cout<<path.cost<<endl;
-    for (int i=0; i<obj->getNumberVertices(); i++)
-        cout << path.path[i] << " - ";
-    cout<<"0"<<endl;
-    
+
+
 
 /*
     double avg;
@@ -77,28 +68,30 @@ int main()
 	}
 */
     
-/*
+    Path route;
+    DynamicBitmask tspDynamicBitmask(*obj);
+
     double avg;
-    for (int i=13; i<14;i+=2)
+    for (int i=24; i<25;i+=2)
     {
         avg =0.0;
-        for (int j=0; j<10; j++)
+        for (int j=0; j<20; j++)
         {
             cout<<i<<" "<<j<<endl;
 //            obj = new matrixCost();
-//            obj->generateRandom(i);
-            BruteForce tsp(13);
+            obj->generateRandom(i);
+            tspDynamicBitmask.init();
             chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
-            tsp.test(0);
+            route = tspDynamicBitmask.findPath();
             chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
             avg += chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
 //            delete obj;
         }
-        avg /= 10;
+        avg /= 20;
         cout<<i<<" "<<setprecision(20)<<avg<<endl;
     }
 
-*/
+
     delete obj;
 
 //    MyMenu();

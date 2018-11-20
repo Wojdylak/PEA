@@ -8,10 +8,6 @@
 inline void swap(int &a, int &b)
 { int c = a; a = b; b = c; }
 
-struct Path{
-    int cost;
-    int *path;
-};
 
 class BruteForce
 {
@@ -28,7 +24,7 @@ public:
     BruteForce(const matrixCost &originalMatrix);
     ~BruteForce();
     
-    const Path findPath();
+    const PathInt findPath();
 
 };
 

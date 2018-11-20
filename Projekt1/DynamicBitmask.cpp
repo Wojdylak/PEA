@@ -2,72 +2,64 @@
 
 #include <iomanip>
 
-DynamicBitmask::DynamicBitmask()
-{
-    this->martixOrginalCost = nullptr;
-    this->state = nullptr;
-}
-
 DynamicBitmask::~DynamicBitmask()
 {
-    this->path.clear();
-    if (this->martixOrginalCost)
-        delete this->martixOrginalCost;
-
+    for(int i = 0; i <numberVertices; i++)
+    {
+        delete [] state[i];
+    }
+    delete [] state;
 }
 
-std::vector<int> DynamicBitmask::findPath(matrixCost *matrix)
+void DynamicBitmask::init()
+{
+    this->~DynamicBitmask();
+    numberVertices = matrix.getNumberVertices();
+    state = new int * [numberVertices];
+    int tmp = 1 << (numberVertices - 1);
+    for(int i = 0; i <numberVertices; i++)
+    {
+        state[i] = new int[tmp];
+        for (int j=0; j<tmp;j++)
+            state[i][j] = INT_MAX;
+    }
+}
+
+const Path DynamicBitmask::findPath()
 {
     int result;
-    this->numberVertices = matrix->getNumberVertices();
-    this->martixOrginalCost = matrix->clone();
-    int numberSubsets = (1 << this->numberVertices - 1);
-    std::vector<int> tmp;
-    
-    this->state = new std::vector<std::vector<int>>(this->numberVertices);
-    for (auto& el : *state)
-        el = std::vector<int>(numberSubsets,INT_MAX);
+    int numberSubsets = (1 << (numberVertices - 1));
     
     result = dynamicBitMask(0, numberSubsets- 1);
     
-    this->path.clear();
-    this->path.push_back(0);
-    this->getPath(result, numberSubsets - 1);
-    this->path.push_back(result);
+    path.push_back(0);
+    getPath(result, numberSubsets - 1);
     
-    while (!(*state).empty())
-    {
-        tmp = (*state).back();
-        (*state).pop_back();
-        tmp.clear();
-    }
-
-    
-    return path;
+    return {result, std::move(path)};
 }
 
 int DynamicBitmask::dynamicBitMask(int currentVertex, int visited)
 {
     if (visited == 0)
     {
-        (*state)[currentVertex][visited] = this->martixOrginalCost->getCost(0, currentVertex);
-        return this->martixOrginalCost->getCost(0, currentVertex);
+        state[currentVertex][visited] = matrix.getCost(0, currentVertex);
+        return matrix.getCost(0, currentVertex);
     }
         
-    if ((*state)[currentVertex][visited] != INT_MAX)
-        return (*state)[currentVertex][visited];
+    if (state[currentVertex][visited] != INT_MAX)
+        return state[currentVertex][visited];
         
-    for (int i = 1; i < this->numberVertices; i++)
+    for (int i = 1; i < numberVertices; i++)
     {
         
-        if (i == currentVertex || !(visited & (1 << i-1)))
+        if (i == currentVertex || !(visited & (1 << (i-1))))
             continue;
-        int value = this->martixOrginalCost->getCost(i, currentVertex) + dynamicBitMask(i, (visited ^ 1 << i-1));
-        if (value < (*state)[currentVertex][visited])
-            (*state)[currentVertex][visited] = value;
+        int value = matrix.getCost(i, currentVertex) + dynamicBitMask(i, (visited ^ 1 << (i-1)));
+        if (value < state[currentVertex][visited])
+            state[currentVertex][visited] = value;
     }
     
-    return (*state)[currentVertex][visited];
+    return state[currentVertex][visited];
 }
 
 void DynamicBitmask::getPath(int cost, int visited)
@@ -75,19 +67,17 @@ void DynamicBitmask::getPath(int cost, int visited)
     // czy juz w tym wiezle znalezlismy wierzcholek
     bool flag = false; 
     int tmp;
-    if (!visited)
-        this->path.push_back(0);
         
-    for (int i=1; i < this->numberVertices; i++)
+    for (int i=1; i < numberVertices; i++)
     {
-        if (visited & (1 << i -1) && !flag)
+        if (visited & (1 << (i -1)) && !flag)
         {
-            tmp =  (visited ^ (1 << i - 1));
+            tmp =  (visited ^ (1 << (i - 1)));
             // jesli koszt podzbioru dla tego wierzcholka i koszt przejscia z niego do poprzedniego rowna sie kosztowi to sprawdzamy ten wezel
-            if ((*state)[i][tmp] + this->martixOrginalCost->getCost(i, this->path.back()) == cost)
+            if (state[i][tmp] + matrix.getCost(i, path.back()) == cost)
             {
-                this->path.push_back(i);
-                this->getPath((*state)[i][tmp], tmp);
+                path.push_back(i);
+                getPath(state[i][tmp], tmp);
                 flag = true;
             }
             

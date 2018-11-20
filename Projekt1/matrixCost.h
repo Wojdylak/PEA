@@ -7,7 +7,17 @@
 #include <iterator>
 #include <iostream>
 #include <iomanip>
+#include <vector>
 
+struct PathInt{
+    int cost;
+    int *path;
+};
+
+struct Path{
+    int cost;
+    std::vector<int> path;
+};
 
 
 class matrixCost

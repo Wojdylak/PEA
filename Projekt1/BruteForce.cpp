@@ -47,7 +47,7 @@ void BruteForce::bruteForce(int vertex)
 }
 
 
-const Path BruteForce::findPath()
+const PathInt BruteForce::findPath()
 {
     for (int i=0; i < numberVertices; i++)
     {

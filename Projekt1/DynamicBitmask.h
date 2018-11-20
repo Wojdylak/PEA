@@ -8,17 +8,19 @@
 
 class DynamicBitmask
 {
+    const matrixCost &matrix;
+    int **state;
     int numberVertices;
-    matrixCost * martixOrginalCost;
-    std::vector<std::vector<int>> *state;
     std::vector<int> path;
     
 public:
 
-    DynamicBitmask();
+    DynamicBitmask(const matrixCost &originalMatrix) : matrix(originalMatrix), state(nullptr), numberVertices(0) {};
     ~DynamicBitmask();
 
-    std::vector<int> findPath(matrixCost * matrix);
+    void init();
+
+    const Path findPath();
     int dynamicBitMask(int currentVertex, int visited);
     void getPath(int cost, int visited);
 
