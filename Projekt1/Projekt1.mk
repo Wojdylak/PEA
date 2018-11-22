@@ -62,7 +62,7 @@ AS       := D:/Programy/TDM-GCC/bin/as.exe
 ## User defined environment variables
 ##
 CodeLiteDir:=D:\Programy\CodeLite
-Objects0=$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) $(IntermediateDirectory)/BranchAndBound.cpp$(ObjectSuffix) $(IntermediateDirectory)/BruteForce.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) $(IntermediateDirectory)/BranchAndBound.cpp$(ObjectSuffix) $(IntermediateDirectory)/BruteForce.cpp$(ObjectSuffix) 
 
 
 
@@ -93,14 +93,6 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix): matrixCost.cpp $(IntermediateDirectory)/matrixCost.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1/matrixCost.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/matrixCost.cpp$(DependSuffix): matrixCost.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/matrixCost.cpp$(DependSuffix) -MM matrixCost.cpp
-
-$(IntermediateDirectory)/matrixCost.cpp$(PreprocessSuffix): matrixCost.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/matrixCost.cpp$(PreprocessSuffix) matrixCost.cpp
-
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
@@ -108,6 +100,14 @@ $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 
 $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
+
+$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix): matrixCost.cpp $(IntermediateDirectory)/matrixCost.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1/matrixCost.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/matrixCost.cpp$(DependSuffix): matrixCost.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/matrixCost.cpp$(DependSuffix) -MM matrixCost.cpp
+
+$(IntermediateDirectory)/matrixCost.cpp$(PreprocessSuffix): matrixCost.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/matrixCost.cpp$(PreprocessSuffix) matrixCost.cpp
 
 $(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix): DynamicBitmask.cpp $(IntermediateDirectory)/DynamicBitmask.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1/DynamicBitmask.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) $(IncludePath)
