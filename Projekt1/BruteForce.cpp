@@ -1,16 +1,23 @@
 #include "BruteForce.h"
 
-BruteForce::BruteForce(const matrixCost &originalMatrix)  : matrix(originalMatrix)
+BruteForce::BruteForce(const matrixCost &originalMatrix) : matrix(originalMatrix) 
 {
-    numberVertices = matrix.getNumberVertices();
-    stackMinPath = new int[numberVertices];
-    stackTmpPath = new int[numberVertices]; 
+    stackTmpPath = nullptr;
+    stackMinPath = nullptr;
 }
 
 BruteForce::~BruteForce()
 {
     delete [] stackTmpPath;
     delete [] stackMinPath;
+}
+
+void BruteForce::init()
+{
+    this->~BruteForce();
+    numberVertices = matrix.getNumberVertices();
+    stackMinPath = new int[numberVertices];
+    stackTmpPath = new int[numberVertices]; 
 }
 
 int BruteForce::calculatePathCost()

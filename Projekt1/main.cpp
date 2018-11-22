@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <vector>
+#include <algorithm>
 
 #include "MyFunctions.h"
 #include "matrixCost.h"
@@ -16,105 +17,32 @@ using namespace std;
 
 void MyMenu();
 
-
 int main()
 {
     srand(time(NULL));
 
-    matrixCost *obj;
-    obj = new matrixCost();
-//    obj->generateRandom(19);
-//    if (obj->loadFile("tsp_17.txt"))
-//        obj->show();
-
-    
-//    double avg=0.0;
-//    chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
-//    tspPath = tspDynamicBitmask.findPath();
-//    chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
-//    avg = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-//    cout<<setprecision(20)<<avg<<endl;
-    
-
-
-
-/*
-    double avg;
-    std::fstream input("BB1_3.txt", std::ios::out);
-	if (input.good())
-	{
-        
-        for (int i=2; i<25;i+=2)
-        {
-            avg =0.0;
-            for (int j=0; j<100; j++)
-            {
-                cout<<i<<" "<<j<<endl;
-                obj = new matrixCost();
-                tspBranchAndBound = new BranchAndBound();
-                obj->generateRandom(i);
-                chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
-                tspBranchAndBound->findPathTwo(obj);
-                chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
-                avg += chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-                delete tspBranchAndBound;
-                delete obj;
-            }
-            avg /= 100;
-            input<<i<<" "<<setprecision(20)<<avg<<endl;
-        }
-        
-		input.close();
-	}
-*/
-    
-    Path route;
-    DynamicBitmask tspDynamicBitmask(*obj);
-
-    double avg;
-    for (int i=24; i<25;i+=2)
-    {
-        avg =0.0;
-        for (int j=0; j<20; j++)
-        {
-            cout<<i<<" "<<j<<endl;
-//            obj = new matrixCost();
-            obj->generateRandom(i);
-            tspDynamicBitmask.init();
-            chrono::steady_clock::time_point start_time = chrono::steady_clock::now();
-            route = tspDynamicBitmask.findPath();
-            chrono::steady_clock::time_point end_time = chrono::steady_clock::now();
-            avg += chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-//            delete obj;
-        }
-        avg /= 20;
-        cout<<i<<" "<<setprecision(20)<<avg<<endl;
-    }
-
-
-    delete obj;
-
-//    MyMenu();
+    MyMenu();
     
 	return 0;
 }
 
-/*
+
 void MyMenu()
 {
     matrixCost * matrix = nullptr;
-    BruteForce * tspBruteForce = nullptr;
-    BranchAndBound * tspBranchAndBound = nullptr;
-    DynamicBitmask * tspDynamicBitmask = nullptr;
-    vector<int> tspPath;
-    int * tspPathStack = nullptr;
+    matrix = new matrixCost();
+    
+    BruteForce tspBruteForce(*matrix);
+    BranchAndBound tspBranchAndBound(*matrix);
+    DynamicBitmask tspDynamicBitmask(*matrix);
+    
+    PathInt pathInt;
+    Path path;
+
     int inNumber;
     char choice;
     bool loop1;
-    string path;
-    
-    
-    matrix = new matrixCost();
+    string filePath;
     
     cout<<INTRO<<endl;
     
@@ -139,8 +67,8 @@ void MyMenu()
                 cout<< "Podaj sciezke: ";
                 cin.clear();
                 cin.ignore(INT_MAX, '\n');
-                cin>>path;
-                if (matrix->loadFile(&path[0]))
+                cin>>filePath;
+                if (matrix->loadFile(&filePath[0]))
                     cout<<"Wczytano poprawnie"<<endl;
                 else
                     cout<<"Error"<<endl;
@@ -160,23 +88,13 @@ void MyMenu()
             {
                 if (matrix->isGood())
                 {
-                    int * wsk;
-                    tspBruteForce = new BruteForce();
-                    tspPathStack = tspBruteForce->findPath(matrix);
+                    tspBruteForce.init();
+                    pathInt = tspBruteForce.findPath();
                     
-                    wsk = tspPathStack;
-                    
-                    cout<<*tspPathStack++<<endl;
-                    int n = *tspPathStack++ - 1;
-                    cout<<*tspPathStack++;
-                    while (n--)
-                    {
-                        cout<<" - "<<*tspPathStack++;
-                    }
-                    cout<<endl;
-                    tspPathStack = nullptr;
-                    delete tspBruteForce;
-                    delete wsk;
+                    cout<<pathInt.cost<<endl;
+                    for (int i=0; i<matrix->getNumberVertices(); i++)
+                        cout << pathInt.path[i] << " - ";
+                    cout<<"0"<<endl;
                 }
                 else
                     cout<<"Nie ma macierzy "<<endl;
@@ -186,17 +104,13 @@ void MyMenu()
             {
                 if (matrix->isGood())
                 {
-                    tspBranchAndBound = new BranchAndBound();
-                    tspPath = tspBranchAndBound->findPath(matrix);
-                    
-                    cout << tspPath[tspPath.size()-1] << endl;
-                    
-                    for (int i = 0; i < tspPath.size() - 1; i++) {
-
-                    if (i != 0) std::cout << " - ";
-                    std::cout << tspPath[i];
+                    tspBranchAndBound.init();
+                    path = tspBranchAndBound.findPath();
+                    cout << path.cost<< endl;
+                    for (auto& el : path.path ) {
+                        cout << el << " - ";
                     }
-                    delete tspBranchAndBound;
+                    cout<<"0"<<endl;
                 }
                 else
                     cout<<"Nie ma macierzy "<<endl;
@@ -206,16 +120,13 @@ void MyMenu()
             {
                 if (matrix->isGood())
                 {
-                    tspBranchAndBound = new BranchAndBound();
-                    tspPath = tspBranchAndBound->findPathTwo(matrix);
-                    
-                    cout << tspPath[tspPath.size()-1] << endl;
-                    
-                    for (int i = 0; i < tspPath.size() - 1; i++) {
-                        if (i != 0) std::cout << " - ";
-                        std::cout << tspPath[i];
-                        }
-                    delete tspBranchAndBound;
+                    tspBranchAndBound.init();
+                    path = tspBranchAndBound.findPathTwo();
+                    cout << path.cost<< endl;
+                    for (auto& el : path.path ) {
+                        cout << el << " - ";
+                    }
+                    cout<<"0"<<endl;
                 }
                 else
                     cout<<"Nie ma macierzy "<<endl;
@@ -225,16 +136,13 @@ void MyMenu()
             {
                 if (matrix->isGood())
                 {
-                    tspDynamicBitmask = new DynamicBitmask();
-                    tspPath = tspDynamicBitmask->findPath(matrix);
-                    
-                    cout << tspPath[tspPath.size()-1] << endl;
-                    
-                    for (int i = 0; i < tspPath.size() - 1; i++) {
-                        if (i != 0) std::cout << " - ";
-                        std::cout << tspPath[i];
-                        }
-                    delete tspDynamicBitmask;
+                    tspDynamicBitmask.init();
+                    path = tspDynamicBitmask.findPath();
+                    cout << path.cost<< endl;
+                    for (auto& el : path.path ) {
+                        cout << el << " - ";
+                    }
+                    cout<<"0"<<endl;
                 }
                 else
                     cout<<"Nie ma macierzy "<<endl;
@@ -253,6 +161,6 @@ void MyMenu()
         cin.ignore(INT_MAX, '\n');
     } // end loop1
 }
-*/
+
 
 

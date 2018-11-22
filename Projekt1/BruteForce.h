@@ -24,6 +24,8 @@ public:
     BruteForce(const matrixCost &originalMatrix);
     ~BruteForce();
     
+    void init();
+    
     const PathInt findPath();
 
 };

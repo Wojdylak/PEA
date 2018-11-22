@@ -19,6 +19,18 @@ struct Path{
     std::vector<int> path;
 };
 
+struct Node{
+    int position;
+    int bound;
+    int cost;
+    int level;
+    std::vector<int> path;
+    bool operator<(const Node& rhs) const
+    {
+        return bound > rhs.bound;
+    }
+};
+
 
 class matrixCost
 {

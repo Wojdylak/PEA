@@ -1,44 +1,32 @@
 #ifndef BRANCHANDBOUND_H
 #define BRANCHANDBOUND_H
 
-#include "Node.h"
 #include "matrixCost.h"
 
 #include <queue>
 #include <iostream>
+#include <algorithm>
 
 class BranchAndBound
 {
     int numberVertices;
-    Node *checkedNode, *tmpNode;
-    matrixCost * martixOrginalCost, * matrixCopyCost;
-    std::priority_queue<Node*, std::vector<Node*>, comp> queue;
+    const matrixCost &matrix;
     
 public:
-    BranchAndBound();
-    ~BranchAndBound();
+    BranchAndBound(const matrixCost &orginalMatrix) : matrix(orginalMatrix) {};
+    ~BranchAndBound() {};
 
-    bool checkRows(Node *n, int j);
-    bool checkColumns(Node *n, int j);
-    int getValue(Node *n);
-    void setBound(Node *n);
-    void setBoundTwo(Node *n);
+    void init();
+
+    bool checkRows(Node n, int j);
+    bool checkColumns(Node n, int j);
+
+    void setBound(Node &n);
+    void setBoundTwo(Node &n);
+
+    const Path findPath();
+    const Path findPathTwo();
     
-    /**
-     * @brief znajduje najkrotrsza sciezke 
-     * @param matrix Wskaznik na obiekt klasy MatrixCost ktora przechowuje graf
-     * @return zwraca wektor z sciezka
-     */
-    std::vector<int> findPath(matrixCost * matrix);
-    
-    /**
-     * @brief znajduje najkrotsza sciezke (algorytm Little)
-     * @param matrix Wskaznik na obiekt klasy MatrixCost ktora przechowuje graf
-     * @return zwraca wektor z sciezka
-     */
-    std::vector<int> findPathTwo(matrixCost * matrix);
-
-
 };
 
 #endif // BRANCHANDBOUND_H

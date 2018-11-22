@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Admin
-Date                   :=20/11/2018
+Date                   :=22/11/2018
 CodeLitePath           :=D:/Programy/CodeLite
 LinkerName             :=D:/Programy/TDM-GCC/bin/g++.exe
 SharedObjectLinkerName :=D:/Programy/TDM-GCC/bin/g++.exe -shared -fPIC
@@ -62,7 +62,7 @@ AS       := D:/Programy/TDM-GCC/bin/as.exe
 ## User defined environment variables
 ##
 CodeLiteDir:=D:\Programy\CodeLite
-Objects0=$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/Node.cpp$(ObjectSuffix) $(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) $(IntermediateDirectory)/BranchAndBound.cpp$(ObjectSuffix) $(IntermediateDirectory)/BruteForce.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/matrixCost.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) $(IntermediateDirectory)/BranchAndBound.cpp$(ObjectSuffix) $(IntermediateDirectory)/BruteForce.cpp$(ObjectSuffix) 
 
 
 
@@ -108,14 +108,6 @@ $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 
 $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
-
-$(IntermediateDirectory)/Node.cpp$(ObjectSuffix): Node.cpp $(IntermediateDirectory)/Node.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1/Node.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Node.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Node.cpp$(DependSuffix): Node.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Node.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Node.cpp$(DependSuffix) -MM Node.cpp
-
-$(IntermediateDirectory)/Node.cpp$(PreprocessSuffix): Node.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Node.cpp$(PreprocessSuffix) Node.cpp
 
 $(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix): DynamicBitmask.cpp $(IntermediateDirectory)/DynamicBitmask.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/Admin/Documents/semest5/ProjektowanieEfektywnych/Projekty/Projekt1/DynamicBitmask.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DynamicBitmask.cpp$(ObjectSuffix) $(IncludePath)

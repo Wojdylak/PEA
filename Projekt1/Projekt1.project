@@ -8,15 +8,13 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
+    <File Name="BranchAndBound.cpp"/>
     <File Name="DynamicBitmask.cpp"/>
     <File Name="DynamicBitmask.h"/>
     <File Name="BruteForce.h"/>
     <File Name="BruteForce.cpp"/>
     <File Name="MyFunctions.h"/>
-    <File Name="BranchAndBound.cpp"/>
     <File Name="BranchAndBound.h"/>
-    <File Name="Node.cpp"/>
-    <File Name="Node.h"/>
     <File Name="matrixCost.cpp"/>
     <File Name="matrixCost.h"/>
     <File Name="main.cpp"/>

@@ -1,22 +1,16 @@
 #include "BranchAndBound.h"
 
-BranchAndBound::BranchAndBound()
-{
-    this->martixOrginalCost = nullptr;
-    
-}
 
-BranchAndBound::~BranchAndBound()
+void BranchAndBound::init()
 {
-    if (this->martixOrginalCost)
-        delete this->martixOrginalCost;
+    numberVertices = matrix.getNumberVertices();
 }
 
 //sprawdzanie czy wchodzilismy juz do tego wierzcholka
-bool BranchAndBound::checkRows(Node *n, int j)
+bool BranchAndBound::checkRows(Node n, int j)
 {
-    for (int i = 0; i < n->path.size() - 1; i++){
-        if (j == n->path[i])
+    for (int i = 0; i < n.level; i++){
+        if (j == n.path[i])
         {
             return true;
         }
@@ -25,10 +19,10 @@ bool BranchAndBound::checkRows(Node *n, int j)
 }
 
 //sprawdzanie czy wychodzilismy z tego wierzcholka
-bool BranchAndBound::checkColumns(Node *n, int j)
+bool BranchAndBound::checkColumns(Node n, int j)
 {
-    for (int i = 1; i < n->path.size(); i++){
-        if (j == n->path[i])
+    for (int i = 1; i <= n.level; i++){
+        if (j == n.path[i])
         {
             return true;
         }
@@ -36,206 +30,167 @@ bool BranchAndBound::checkColumns(Node *n, int j)
     return false;
 }
 
-int BranchAndBound::getValue(Node *n)
+void BranchAndBound::setBound(Node &n)
 {
-    int value = 0;
+    int min, tmp;
+    n.bound = n.cost;
     
-    for (int i=0; i < n->path.size()-1; i++)
-    {
-        value += this->martixOrginalCost->getCost(n->path[i], n->path[i+1]);
-    }
-    return value;
-}
-
-void BranchAndBound::setBound(Node *n)
-{
-    int min,tmp;
-    n->bound = getValue(n);
-    
-    for (int i=0; i<this->numberVertices; i++)
+    for (int i=0; i < numberVertices; i++)
     {
         // jesli bylismy juz w jakims wierzcholku to juz go nie odwiedzamy
-        if (this->checkRows(n, i)){
+        if (checkRows(n, i))
             continue;
-        }
+            
         min = INT_MAX;
-        for (int j=0; j<this->numberVertices; j++)
+        for (int j=0; j < numberVertices; j++)
         {
-            if (this->checkColumns(n, j)){
+            if (checkColumns(n, j))
                 continue;
-            }
-            
-            if (i == j){
+                
+            if (i == j)
                 continue;
-            }
-            
-            tmp = martixOrginalCost->getCost(i, j);
-            if (tmp < min && tmp >= 0){
+                
+            tmp = matrix.getCost(i, j);
+            if (tmp < min && tmp >= 0)
                 min = tmp;
-            }
         }
-        n->bound += min;
+        n.bound += min;
     }
 }
 
-void BranchAndBound::setBoundTwo(Node *n)
+void BranchAndBound::setBoundTwo(Node &n)
 {
     int tmp = 0;
-    this->matrixCopyCost = this->martixOrginalCost->clone();
+    matrixCost *matrixCopy;
+    matrixCopy = matrix.clone();
     
-    tmp +=  this->matrixCopyCost->reduceCostRows();
-    tmp += this->matrixCopyCost->reduceCostColumns();
+    tmp +=  matrixCopy->reduceCostRows();
+    tmp += matrixCopy->reduceCostColumns();
     
-    for (int i=0; i<n->path.size()-1; i++)
+    for (int i=0; i < n.level; i++)
     {
-        tmp += this->matrixCopyCost->getCost(n->path[i], n->path[i+1]);
-        this->matrixCopyCost->reduceMatrix(n->path[i], n->path[i+1]);
-        tmp += this->matrixCopyCost->reduceCostRows();
-        tmp += this->matrixCopyCost->reduceCostColumns();
+        tmp += matrixCopy->getCost(n.path[i], n.path[i+1]);
+        matrixCopy->reduceMatrix(n.path[i], n.path[i+1]);
+        tmp += matrixCopy->reduceCostRows();
+        tmp += matrixCopy->reduceCostColumns();
     }
     
-    delete this->matrixCopyCost;
-    this->matrixCopyCost = nullptr;
-    n->bound = tmp;
+    delete matrixCopy;
+    matrixCopy = nullptr;
+    n.bound = tmp;
 }
 
 
-std::vector<int> BranchAndBound::findPath(matrixCost * matrix)
+const Path BranchAndBound::findPath()
 {
-    this->numberVertices = matrix->getNumberVertices();
-    this->martixOrginalCost = matrix->clone();
-    int bestValue = INT_MAX;
-    std::vector<int> tmpPath;
-    std::vector<int> resultPath;
-    this->checkedNode = new Node();
+    int bestCost = 0;
+    std::priority_queue<Node> queue;
     
-    tmpPath.push_back(0);
-    this->checkedNode->level = 1; 
-    this->checkedNode->path = tmpPath;
-    this->setBound(this->checkedNode);
-    
-    
-    
-    queue.push(this->checkedNode);
-    
-    while(!queue.empty())
+    std::vector<int> bestPath;
+    bestPath.push_back(0);
+    for (int i = 1; i<numberVertices; i++)
     {
-        this->checkedNode = this->queue.top();
-        this->queue.pop();
-     
-   
-        if (this->checkedNode->bound < bestValue)
+        bestPath.push_back(i);
+        bestCost += matrix.getCost(i -1, i);
+    }
+    bestCost += matrix.getCost(numberVertices - 1,0);
+
+    Node tmp {0, 0, 0, 0, std::vector<int>(numberVertices, 0)};
+    setBound(tmp);
+    
+    queue.push(tmp);
+    
+    while (!queue.empty())
+    {
+        Node currentNode = queue.top();
+        queue.pop();
+        
+        //std::cout<<currentNode.position<<" "<<currentNode.bound<<" "<<bestCost<<std::endl;
+        
+        if (currentNode.bound > bestCost)
+            break;
+            
+        if (currentNode.level == numberVertices - 1)
         {
-            for (int i=1; i< this->numberVertices; i++)
+            currentNode.cost += matrix.getCost(currentNode.position, 0);
+            if (currentNode.cost < bestCost)
             {
-                if (!this->checkColumns(this->checkedNode, i))
-                {
-                    this->tmpNode = new Node();
-                    this->tmpNode->path = this->checkedNode->path;
-                    this->tmpNode->path.push_back(i);
-                    this->tmpNode->level = this->checkedNode->level +1;
-                    this->setBound(this->tmpNode);
-                    
-                    if (this->tmpNode->level == this->numberVertices)
-                    {
-                        this->tmpNode->path.push_back(0);
-                        this->setBound(this->tmpNode);
-                        if (this->tmpNode->bound < bestValue)
-                        {
-                            bestValue = this->tmpNode->bound;
-                            resultPath = this->tmpNode->path;
-                        }
-                    }
-                    
-                    if (this->tmpNode->bound < bestValue)
-                    {
-                        queue.push(this->tmpNode);
-                    }
-                    else
-                        delete this->tmpNode;
-                    this->tmpNode = nullptr;
-                }
+                bestCost = std::move(currentNode.cost);
+                bestPath = std::move(currentNode.path);
             }
         }
-        delete this->checkedNode;
-        this->checkedNode = nullptr;
-    } //end while
-    
-    resultPath.push_back(bestValue);
-    
-    delete this->martixOrginalCost;
-    this->martixOrginalCost = nullptr;
-    
-    return resultPath;
-    
-}
-
-std::vector<int> BranchAndBound::findPathTwo(matrixCost * matrix)
-{
-    this->numberVertices = matrix->getNumberVertices();
-    this->martixOrginalCost = matrix->clone();
-    int bestValue = INT_MAX;
-    std::vector<int> tmpPath;
-    std::vector<int> resultPath;
-    this->checkedNode = new Node();
-    
-    
-    tmpPath.push_back(0);
-    this->checkedNode->level = 1; 
-    this->checkedNode->path = tmpPath;
-    this->setBoundTwo(this->checkedNode);
-
-    queue.push(this->checkedNode);
-    
-    while(!queue.empty())
-    {
-        this->checkedNode = this->queue.top();
-        this->queue.pop();
-     
-        if (this->checkedNode->bound < bestValue)
+        
+        for (int i = 1; i < numberVertices; ++i)
         {
-            for (int i=1; i< this->numberVertices; i++)
-            {
-                if (!this->checkColumns(this->checkedNode, i))
-                {
-                    this->tmpNode = new Node();
-                    this->tmpNode->path = this->checkedNode->path;
-                    this->tmpNode->path.push_back(i);
-                    this->tmpNode->level = this->checkedNode->level +1;
-                    this->setBoundTwo(this->tmpNode);
-                    
-                    if (this->tmpNode->level == this->numberVertices)
-                    {
-                        this->tmpNode->path.push_back(0);
-                        this->setBound(this->tmpNode);
-                        if (this->tmpNode->bound < bestValue)
-                        {
-                            bestValue = this->tmpNode->bound;
-                            resultPath = this->tmpNode->path;
-                        }
-                    }
-                    
-                    if (this->tmpNode->bound < bestValue)
-                    {
-                        queue.push(this->tmpNode);
-                    }
-                    else
-                        delete this->tmpNode;
-                    this->tmpNode = nullptr;
-                }
-            }
-            
-            
+            if (find(currentNode.path.begin(), currentNode.path.end(), i) != currentNode.path.end() ||
+            i == currentNode.position ||
+            (currentNode.cost + matrix.getCost(currentNode.position, i)) > bestCost )
+                continue;
+                
+                
+            currentNode.path[currentNode.level + 1] = i;
+            tmp = {i, 0, currentNode.cost + matrix.getCost(currentNode.position, i), currentNode.level + 1, currentNode.path};
+            setBound(tmp);
+            queue.push(tmp);
         }
-        delete this->checkedNode;
-        this->checkedNode = nullptr;
-    } //end while
+    } // end while
     
-    resultPath.push_back(bestValue);
-    
-    delete this->martixOrginalCost;
-    this->martixOrginalCost = nullptr;
-    
-    return resultPath;
+    return {std::move(bestCost), std::move(bestPath)};
 }
-//*/
+
+const Path BranchAndBound::findPathTwo()
+{
+    int bestCost = 0;
+    std::priority_queue<Node> queue;
+    
+    std::vector<int> bestPath;
+    bestPath.push_back(0);
+    for (int i = 1; i<numberVertices; i++)
+    {
+        bestPath.push_back(i);
+        bestCost += matrix.getCost(i -1, i);
+    }
+    bestCost += matrix.getCost(numberVertices - 1,0);
+
+    Node tmp {0, 0, 0, 0, std::vector<int>(numberVertices, 0)};
+    setBoundTwo(tmp);
+    
+    queue.push(tmp);
+    
+    while (!queue.empty())
+    {
+        Node currentNode = queue.top();
+        queue.pop();
+        
+        //std::cout<<currentNode.position<<" "<<currentNode.bound<<" "<<bestCost<<std::endl;
+        
+        if (currentNode.bound > bestCost)
+            break;
+            
+        if (currentNode.level == numberVertices - 1)
+        {
+            currentNode.cost += matrix.getCost(currentNode.position, 0);
+            if (currentNode.cost < bestCost)
+            {
+                bestCost = std::move(currentNode.cost);
+                bestPath = std::move(currentNode.path);
+            }
+        }
+        
+        for (int i = 1; i < numberVertices; ++i)
+        {
+            if (find(currentNode.path.begin(), currentNode.path.end(), i) != currentNode.path.end() ||
+            i == currentNode.position ||
+            (currentNode.cost + matrix.getCost(currentNode.position, i)) > bestCost )
+                continue;
+                
+                
+            currentNode.path[currentNode.level + 1] = i;
+            tmp = {i, 0, currentNode.cost + matrix.getCost(currentNode.position, i), currentNode.level + 1, currentNode.path};
+            setBoundTwo(tmp);
+            queue.push(tmp);
+        }
+    } // end while
+    
+    return {std::move(bestCost), std::move(bestPath)};
+}
