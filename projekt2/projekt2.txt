@@ -1,1 +1,1 @@
-./Release/main.cpp.o   
+./Release/main.cpp.o ./Release/matrixCost.cpp.o ./Release/TabuSearch.cpp.o ./Release/SimulatedAnnealing.cpp.o   
